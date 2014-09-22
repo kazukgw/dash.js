@@ -172,7 +172,7 @@ MediaPlayer.dependencies.FragmentLoader = function () {
             var req = new XMLHttpRequest(),
                 isSuccessful = false;
 
-            req.open("HEAD", this.tokenAuthentication.addTokenAsQueryArg(request.url), true);
+            req.open("HEAD", request.url, true);
 
             req.onload = function () {
                 if (req.status < 200 || req.status > 299) return;
@@ -195,6 +195,7 @@ MediaPlayer.dependencies.FragmentLoader = function () {
         metricsModel: undefined,
         errHandler: undefined,
         debug: undefined,
+        tokenAuthentication:undefined,
 
         load: function (req) {
 
