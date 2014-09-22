@@ -48,7 +48,7 @@ MediaPlayer.dependencies.FragmentLoader = function () {
                                                   [0]);
                 lastTraceTime = request.requestStartDate;
 
-                req.open("GET", request.url, true);
+                req.open("GET", self.tokenAuthentication.addTokenAsQueryArg(request.url), true);
                 req.responseType = "arraybuffer";
 /*
                 req.setRequestHeader("Cache-Control", "no-cache");
@@ -172,7 +172,7 @@ MediaPlayer.dependencies.FragmentLoader = function () {
             var req = new XMLHttpRequest(),
                 isSuccessful = false;
 
-            req.open("HEAD", request.url, true);
+            req.open("HEAD", this.tokenAuthentication.addTokenAsQueryArg(request.url), true);
 
             req.onload = function () {
                 if (req.status < 200 || req.status > 299) return;

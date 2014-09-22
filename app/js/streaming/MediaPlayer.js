@@ -105,6 +105,7 @@ MediaPlayer = function (aContext) {
         metricsModel: undefined,
         metricsExt: undefined,
         bufferExt: undefined,
+        tokenAuthentication: undefined,
 
         addEventListener: function (type, listener, useCapture) {
             this.eventBus.addEventListener(type, listener, useCapture);

@@ -45,6 +45,7 @@ MediaPlayer.dependencies.ManifestLoader = function () {
                 }
                 needFailureReport = false;
                 mpdLoadedTime = new Date();
+                self.tokenAuthentication.checkRequestHeaderForToken(request);
 
                 self.metricsModel.addHttpRequest("stream",
                                                  null,
@@ -118,6 +119,7 @@ MediaPlayer.dependencies.ManifestLoader = function () {
         parser: undefined,
         errHandler: undefined,
         metricsModel: undefined,
+        tokenAuthentication: undefined,
         load: function(url) {
             deferred = Q.defer();
             doLoad.call(this, url, RETRY_ATTEMPTS);
