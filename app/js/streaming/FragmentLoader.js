@@ -50,6 +50,7 @@ MediaPlayer.dependencies.FragmentLoader = function () {
 
                 req.open("GET", self.tokenAuthentication.addTokenAsQueryArg(request.url), true);
                 req.responseType = "arraybuffer";
+                req = self.tokenAuthentication.setTokenInRequestHeader(req);
 /*
                 req.setRequestHeader("Cache-Control", "no-cache");
                 req.setRequestHeader("Pragma", "no-cache");

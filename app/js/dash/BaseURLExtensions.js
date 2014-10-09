@@ -144,6 +144,8 @@ Dash.dependencies.BaseURLExtensions = function () {
 
         findInit = function (data, info) {
             var deferred = Q.defer(),
+                ftyp,
+                moov,
                 start,
                 end,
                 d = new DataView(data),
@@ -171,6 +173,12 @@ Dash.dependencies.BaseURLExtensions = function () {
                     pos += 1;
                 }
 
+                if (type === "ftyp") {
+                    ftyp = pos - 8;
+                }
+                if (type === "moov") {
+                    moov = pos - 8;
+                }
                 if (type !== "moov") {
                     pos += size - 8;
                 }
@@ -214,12 +222,13 @@ Dash.dependencies.BaseURLExtensions = function () {
                 request.open("GET", self.tokenAuthentication.addTokenAsQueryArg(info.url));
                 request.responseType = "arraybuffer";
                 request.setRequestHeader("Range", "bytes=" + info.range.start + "-" + info.range.end);
+                request = self.tokenAuthentication.setTokenInRequestHeader(request);
                 request.send(null);
             } else {
                 // Case 2
                 // We have the entire range, so continue.
-                start = pos - 8;
-                end = start + size - 1;
+                start = ftyp === undefined ? moov : ftyp;
+                end = moov + size - 1;
                 irange = start + "-" + end;
 
                 self.debug.log("Found the initialization.  Range: " + irange);
@@ -276,6 +285,7 @@ Dash.dependencies.BaseURLExtensions = function () {
             request.open("GET", self.tokenAuthentication.addTokenAsQueryArg(info.url));
             request.responseType = "arraybuffer";
             request.setRequestHeader("Range", "bytes=" + info.range.start + "-" + info.range.end);
+            request = self.tokenAuthentication.setTokenInRequestHeader(request);
             request.send(null);
             self.debug.log("Perform init search: " + info.url);
 
@@ -368,6 +378,7 @@ Dash.dependencies.BaseURLExtensions = function () {
                 request.open("GET", self.tokenAuthentication.addTokenAsQueryArg(info.url));
                 request.responseType = "arraybuffer";
                 request.setRequestHeader("Range", "bytes=" + info.range.start + "-" + info.range.end);
+                request = self.tokenAuthentication.setTokenInRequestHeader(request);
                 request.send(null);
             } else {
                 // Case 3
@@ -501,6 +512,7 @@ Dash.dependencies.BaseURLExtensions = function () {
             request.open("GET", self.tokenAuthentication.addTokenAsQueryArg(info.url));
             request.responseType = "arraybuffer";
             request.setRequestHeader("Range", "bytes=" + info.range.start + "-" + info.range.end);
+            request = self.tokenAuthentication.setTokenInRequestHeader(request);
             request.send(null);
             self.debug.log("Perform SIDX load: " + info.url);
 
@@ -510,7 +522,7 @@ Dash.dependencies.BaseURLExtensions = function () {
     return {
         debug: undefined,
         errHandler: undefined,
-
+        tokenAuthentication:undefined,
         loadSegments: loadSegments,
         loadInitialization: loadInit,
         parseSegments: parseSegments,
