@@ -859,11 +859,18 @@ MediaPlayer.dependencies.BufferController = function () {
                     segmentTime;
                 promise = deferred.promise;
 
-                Q.when(seeking ? seekTarget : self.indexHandler.getCurrentTime(currentRepresentation)).then(
-                    function (time) {
-                        self.sourceBufferExt.getBufferRange(buffer, time).then(
-                            function (range) {
-                                if (seeking) currentRepresentation.segments = null;
+                self.sourceBufferExt.getBufferRange(buffer, segmentTime).then(
+                    function (range) {
+                        return Q.when(seeking ? seekTarget : self.indexHandler.getCurrentTime(currentRepresentation)).then(
+                            function (time) {
+                                // segmentTime = time;
+                                // seeking = false;
+                /////
+                // Q.when(seeking ? seekTarget : self.indexHandler.getCurrentTime(currentRepresentation)).then(
+                    // function (time) {
+                        // self.sourceBufferExt.getBufferRange(buffer, time).then(
+                            // function (range) {
+                                // if (seeking) currentRepresentation.segments = null;
 
                                 seeking = false;
                                 segmentTime = range ? range.end : time;
